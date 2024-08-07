@@ -27,7 +27,7 @@ public class CallableExample {
             list.add(executorService.submit(new CallableProcessor(i)));
         }
 
-        for (Future f : list) {
+        for (Future<String> f : list) {
             try {
                 System.out.println(f.get());
             } catch (InterruptedException | ExecutionException e) {
