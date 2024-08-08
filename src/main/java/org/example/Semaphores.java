@@ -42,5 +42,6 @@ public class Semaphores {
         for (int i = 0; i < 12; i++) {
             service.execute(Downloader.TEST_INSTANCE::download);
         }
+        service.shutdown();
     }
 }
