@@ -7,5 +7,8 @@ public class App {
         SimpleRecursiveTask task = new SimpleRecursiveTask(200);
         ForkJoinPool pool = new ForkJoinPool();
         System.out.println(task.invoke());
+
+        RecursiveFibonacci fibonacci = new RecursiveFibonacci(8);
+        System.out.println(fibonacci.invoke());
     }
 }
