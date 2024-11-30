@@ -18,7 +18,7 @@ class LockWorker {
         lock.unlock();
     }
 
-    public void conume() throws InterruptedException {
+    public void consume() throws InterruptedException {
         // make sure that we start with the producer. producer should acquire the lock first
         Thread.sleep(2000);
         lock.lock();
@@ -45,7 +45,7 @@ public class ProducerConsumerLocks {
 
         Thread t2 = new Thread(() -> {
             try {
-                w.conume();
+                w.consume();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
