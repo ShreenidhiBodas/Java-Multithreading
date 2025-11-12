@@ -36,6 +36,26 @@ enum Downloader {
     }
 }
 
+class Worker {
+    private final Semaphore mutex = new Semaphore(1);
+
+    public void accessCriticalSection(String threadName) {
+        try {
+            System.out.println("Thread " + threadName + " trying to acquire mutex");
+            mutex.acquire();
+            System.out.println("Thread: " + threadName + ": Mutex acquired.");
+            Thread.sleep(2000); // simulating work
+            System.out.println("Thread: " + threadName + " completed execution");
+        } catch (InterruptedException e) {
+            System.out.println("Thread " + threadName + " was interrupted");
+            Thread.currentThread().interrupt();
+        } finally {
+            System.out.println("Thread " + threadName + " released mutex");
+            mutex.release();
+        }
+    }
+}
+
 public class Semaphores {
     public static void main(String[] args) {
         ExecutorService service = Executors.newCachedThreadPool();
@@ -43,5 +63,20 @@ public class Semaphores {
             service.execute(Downloader.TEST_INSTANCE::download);
         }
         service.shutdown();
+
+        // Using semaphores as mutex by setting the permit to 1
+        // Worker w = new Worker();
+        // Thread t1 = new Thread(() -> w.accessCriticalSection("Thread-1"));
+        // Thread t2 = new Thread(() -> w.accessCriticalSection("Thread-2"));
+
+        // t1.start();
+        // t2.start();
+
+        // try {
+        //     t1.join();
+        //     t2.join();
+        // } catch (InterruptedException e) {
+        //     e.printStackTrace();
+        // }
     }
 }
