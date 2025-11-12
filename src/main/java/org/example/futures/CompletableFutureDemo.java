@@ -1,9 +1,6 @@
 package org.example.futures;
 
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Executor;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.concurrent.*;
 
 public class CompletableFutureDemo {
     public static void main(String[] args) {
@@ -20,6 +17,8 @@ public class CompletableFutureDemo {
                     .thenApply(String::toUpperCase)
                     .thenAccept(System.out::println);
 
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         try (var service = Executors.newVirtualThreadPerTaskExecutor()) {
@@ -27,6 +26,19 @@ public class CompletableFutureDemo {
                     .thenCombine(CompletableFuture.supplyAsync(RestQuery::run), (res1, res2) -> res1 + "\n" + res2)
                     .thenApply(String::toUpperCase)
                     .thenAccept(System.out::println);
+        }
+
+        try (var service = Executors.newFixedThreadPool(2)) {
+            CompletableFuture<String> cf1 = CompletableFuture.completedFuture("A new Completed future.");
+
+            CompletableFuture<Integer> cf2 = cf1.thenApplyAsync(s -> {
+                System.out.println("String: " + s);
+                System.out.println("Running in thread: " + Thread.currentThread().getName());
+                return s.length();
+            });
+            System.out.println("String length: " + cf2.join());
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }
